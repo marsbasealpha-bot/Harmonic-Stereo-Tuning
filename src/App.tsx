@@ -211,12 +211,12 @@ export default function App() {
     if (saved && saved.startsWith('blob:')) {
       localStorage.removeItem('harmonic_last_src');
       localStorage.removeItem('harmonic_last_name');
-      return "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+      return "https://raw.githubusercontent.com/mdn/webaudio-examples/main/audio-basics/outfoxing.mp3";
     }
-    return saved || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+    return saved || "https://raw.githubusercontent.com/mdn/webaudio-examples/main/audio-basics/outfoxing.mp3";
   });
   const [fileName, setFileName] = useState(() => {
-    return localStorage.getItem('harmonic_last_name') || 'Default: Harmonic Ambient';
+    return localStorage.getItem('harmonic_last_name') || 'Default: Outfoxing (Ambient)';
   });
   const [isLooping, setIsLooping] = useState(true);
   const [playbackRate, setPlaybackRate] = useState(1.0);
@@ -264,6 +264,7 @@ export default function App() {
 
     const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
     audioCtxRef.current = ctx;
+    if (ctx.state === 'suspended') ctx.resume();
 
     // Music Routing
     const musicSplitter = ctx.createChannelSplitter(2);
@@ -288,6 +289,10 @@ export default function App() {
       
       musicLeftGain.connect(musicMerger, 0, 0);
       musicRightGain.connect(musicMerger, 0, 1);
+
+      // Apply initial volumes from state
+      musicLeftGain.gain.setValueAtTime(musicVolume.left / 100, ctx.currentTime);
+      musicRightGain.gain.setValueAtTime(musicVolume.right / 100, ctx.currentTime);
 
       const analyser = ctx.createAnalyser();
       analyser.fftSize = 256;
@@ -484,11 +489,10 @@ export default function App() {
 
   useEffect(() => {
     // Sync Music Gains
-    if (musicGainsRef.current.left) {
-      musicGainsRef.current.left.gain.setTargetAtTime(musicVolume.left / 100, audioCtxRef.current!.currentTime, 0.05);
-    }
-    if (musicGainsRef.current.right) {
-      musicGainsRef.current.right.gain.setTargetAtTime(musicVolume.right / 100, audioCtxRef.current!.currentTime, 0.05);
+    if (musicGainsRef.current.left && audioCtxRef.current) {
+      const ctx = audioCtxRef.current;
+      musicGainsRef.current.left.gain.setTargetAtTime(musicVolume.left / 100, ctx.currentTime, 0.05);
+      musicGainsRef.current.right.gain.setTargetAtTime(musicVolume.right / 100, ctx.currentTime, 0.05);
     }
   }, [musicVolume]);
 
@@ -539,9 +543,9 @@ export default function App() {
 
   const handleAudioError = () => {
     // If the current source failed, fallback to default
-    if (audioSrc !== "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3") {
-      setAudioSrc("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3");
-      setFileName('Default: Harmonic Ambient');
+    if (audioSrc !== "https://raw.githubusercontent.com/mdn/webaudio-examples/main/audio-basics/outfoxing.mp3") {
+      setAudioSrc("https://raw.githubusercontent.com/mdn/webaudio-examples/main/audio-basics/outfoxing.mp3");
+      setFileName('Default: Outfoxing (Ambient)');
     }
   };
 
