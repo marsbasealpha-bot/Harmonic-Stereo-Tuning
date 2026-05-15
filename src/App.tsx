@@ -629,10 +629,108 @@ export default function App() {
           </div>
         </header>
 
+        {/* --- Harmonic Generator Panel --- */}
+        <motion.section 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="glass-panel"
+        >
+          <div className="flex justify-between items-center mb-8">
+            <div className="flex items-center gap-2">
+              <span className="data-label">Harmonic Generator</span>
+              {isTonePlaying && (
+                <motion.div 
+                  animate={{ opacity: [0.2, 1, 0.2] }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                  className="px-1.5 py-0.5 rounded bg-[#ff9d00]/10 border border-[#ff9d00]/30 text-[7px] font-bold text-[#ff9d00] uppercase tracking-widest"
+                >
+                  Emitting
+                </motion.div>
+              )}
+            </div>
+            <div className="flex gap-4">
+              <button 
+                onClick={() => { toggleTone('left', false); toggleTone('right', false); }}
+                className="btn-icon w-10 h-10"
+                title="Kill Signal"
+              >
+                <Square size={14} />
+              </button>
+              <button 
+                onClick={() => { toggleTone('left', true); toggleTone('right', true); }}
+                className="btn-primary w-10 h-10"
+                title="Initiate Signal"
+              >
+                <Play size={14} />
+              </button>
+            </div>
+          </div>
+
+          <div className="border border-[#ff9d00]/20 rounded-2xl p-6 mb-10 relative overflow-hidden bg-black/60 h-[120px] flex flex-col justify-center">
+            <div className="flex justify-between items-center mb-2 z-10">
+              <span className="data-label text-[9px]">Frequency Monitor</span>
+              <Activity size={12} className="text-[#ff9d00]/40" />
+            </div>
+            <canvas ref={toneCanvasRef} width={400} height={100} className="w-full h-full" />
+          </div>
+
+          <div className="flex flex-col gap-3 mb-12">
+            <div className="flex justify-between items-center">
+              <span className="data-label text-[9px]">Signal Amplitude</span>
+              <span className="mono-value text-[#ff9d00] font-bold">{toneMasterVolume}%</span>
+            </div>
+            <input 
+              type="range" 
+              className="w-full" 
+              value={toneMasterVolume} 
+              onChange={(e) => setToneMasterVolume(Number(e.target.value))} 
+            />
+          </div>
+
+          <div className="flex justify-around items-center mb-8 relative">
+            <Knob 
+              label="L-Oscillator" 
+              side="left" 
+              type="frequency"
+              value={toneState.left.frequency} 
+              onChange={(v) => setToneState(p => ({ ...p, left: { ...p.left, frequency: v } }))} 
+            />
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center opacity-10 pointer-events-none">
+              <div className="w-[1px] h-16 bg-white" />
+              <span className="data-label my-2">Harmonic</span>
+              <div className="w-[1px] h-16 bg-white" />
+            </div>
+            <Knob 
+              label="R-Oscillator" 
+              side="right" 
+              type="frequency"
+              value={toneState.right.frequency} 
+              onChange={(v) => setToneState(p => ({ ...p, right: { ...p.right, frequency: v } }))} 
+            />
+          </div>
+          
+          <div className="flex justify-center">
+            <button 
+              onClick={() => {
+                setToneState({
+                  left: { frequency: 112, volume: 50, active: toneState.left.active },
+                  right: { frequency: 110, volume: 50, active: toneState.right.active }
+                });
+                setMusicVolume({ left: 50, right: 50 });
+                setToneMasterVolume(50);
+              }}
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold text-white/40 hover:text-white hover:bg-white/10 transition-all uppercase tracking-widest"
+            >
+              <RefreshCw size={12} /> Calibrate Frequencies
+            </button>
+          </div>
+        </motion.section>
+
         {/* --- Playback & Gain Panel --- */}
         <motion.section 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
           className="glass-panel"
         >
           <div className="flex justify-between items-center mb-6">
@@ -754,104 +852,6 @@ export default function App() {
               value={musicVolume.right} 
               onChange={(v) => setMusicVolume(p => ({ ...p, right: v }))} 
             />
-          </div>
-        </motion.section>
-
-        {/* --- Frequency Panel --- */}
-        <motion.section 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="glass-panel"
-        >
-          <div className="flex justify-between items-center mb-8">
-            <div className="flex items-center gap-2">
-              <span className="data-label">Harmonic Generator</span>
-              {isTonePlaying && (
-                <motion.div 
-                  animate={{ opacity: [0.2, 1, 0.2] }}
-                  transition={{ duration: 1, repeat: Infinity }}
-                  className="px-1.5 py-0.5 rounded bg-[#ff9d00]/10 border border-[#ff9d00]/30 text-[7px] font-bold text-[#ff9d00] uppercase tracking-widest"
-                >
-                  Emitting
-                </motion.div>
-              )}
-            </div>
-            <div className="flex gap-4">
-              <button 
-                onClick={() => { toggleTone('left', false); toggleTone('right', false); }}
-                className="btn-icon w-10 h-10"
-                title="Kill Signal"
-              >
-                <Square size={14} />
-              </button>
-              <button 
-                onClick={() => { toggleTone('left', true); toggleTone('right', true); }}
-                className="btn-primary w-10 h-10"
-                title="Initiate Signal"
-              >
-                <Play size={14} />
-              </button>
-            </div>
-          </div>
-
-          <div className="border border-[#ff9d00]/20 rounded-2xl p-6 mb-10 relative overflow-hidden bg-black/60 h-[120px] flex flex-col justify-center">
-            <div className="flex justify-between items-center mb-2 z-10">
-              <span className="data-label text-[9px]">Frequency Monitor</span>
-              <Activity size={12} className="text-[#ff9d00]/40" />
-            </div>
-            <canvas ref={toneCanvasRef} width={400} height={100} className="w-full h-full" />
-          </div>
-
-          <div className="flex flex-col gap-3 mb-12">
-            <div className="flex justify-between items-center">
-              <span className="data-label text-[9px]">Signal Amplitude</span>
-              <span className="mono-value text-[#ff9d00] font-bold">{toneMasterVolume}%</span>
-            </div>
-            <input 
-              type="range" 
-              className="w-full" 
-              value={toneMasterVolume} 
-              onChange={(e) => setToneMasterVolume(Number(e.target.value))} 
-            />
-          </div>
-
-          <div className="flex justify-around items-center mb-8 relative">
-            <Knob 
-              label="L-Oscillator" 
-              side="left" 
-              type="frequency"
-              value={toneState.left.frequency} 
-              onChange={(v) => setToneState(p => ({ ...p, left: { ...p.left, frequency: v } }))} 
-            />
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center opacity-10 pointer-events-none">
-              <div className="w-[1px] h-16 bg-white" />
-              <span className="data-label my-2">Harmonic</span>
-              <div className="w-[1px] h-16 bg-white" />
-            </div>
-            <Knob 
-              label="R-Oscillator" 
-              side="right" 
-              type="frequency"
-              value={toneState.right.frequency} 
-              onChange={(v) => setToneState(p => ({ ...p, right: { ...p.right, frequency: v } }))} 
-            />
-          </div>
-          
-          <div className="flex justify-center">
-            <button 
-              onClick={() => {
-                setToneState({
-                  left: { frequency: 112, volume: 50, active: toneState.left.active },
-                  right: { frequency: 110, volume: 50, active: toneState.right.active }
-                });
-                setMusicVolume({ left: 50, right: 50 });
-                setToneMasterVolume(50);
-              }}
-              className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold text-white/40 hover:text-white hover:bg-white/10 transition-all uppercase tracking-widest"
-            >
-              <RefreshCw size={12} /> Calibrate Frequencies
-            </button>
           </div>
         </motion.section>
 
