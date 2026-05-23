@@ -1,11 +1,11 @@
-const CACHE_NAME = 'harmonic-v4';
+const CACHE_NAME = 'harmonic-v5';
 const ASSETS_TO_CACHE = [
   '/harmonic-stereo-tuning/',
   '/harmonic-stereo-tuning/index.html',
   '/harmonic-stereo-tuning/manifest.json',
   '/harmonic-stereo-tuning/icon.svg',
   '/harmonic-stereo-tuning/back-to-you-jesus.m4a',
-  '/harmonic-stereo-tuning/assets/index-DnTJCndL.js',
+  '/harmonic-stereo-tuning/assets/index-Q-WnF0rf.js',
   '/harmonic-stereo-tuning/assets/index-RN-81Os0.css'
 ];
 

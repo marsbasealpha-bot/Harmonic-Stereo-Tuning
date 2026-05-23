@@ -2,7 +2,7 @@
   "name": "harmonic-stereo-tuning",
   "description": "Professional-grade sonic frequency generator and stereo tuning suite.",
   "private": true,
-  "version": "1.0.0",
+  "version": "2.1.0",
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",

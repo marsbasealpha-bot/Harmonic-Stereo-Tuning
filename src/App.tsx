@@ -610,7 +610,7 @@ export default function App() {
             <div className="flex items-center gap-2 mb-2">
               <span className="data-label text-[8px] opacity-80">Acoustic Precision Interface</span>
               <span className="px-1 py-0.5 rounded bg-white/5 border border-white/10 text-[6px] font-bold text-white/30 uppercase tracking-widest">
-                v{process.env.APP_VERSION || '1.0.0'}
+                v{process.env.APP_VERSION || '2.1.0'}
               </span>
             </div>
             <h1 className="text-4xl font-black text-white tracking-tighter uppercase leading-none">
@@ -859,7 +859,7 @@ export default function App() {
             © 2026 HARMONIC STEREO TUNING • RED INDIAN PRODUCTIONS
           </p>
           <p className="data-label text-[7px] opacity-20 uppercase tracking-[0.1em] mt-2">
-            Version {process.env.APP_VERSION || '1.0.0'} • Last Updated: 2026-03-08
+            Version {process.env.APP_VERSION || '2.1.0'} • Last Updated: 2026-05-23
           </p>
         </footer>
       </div>
