@@ -211,12 +211,12 @@ export default function App() {
     if (saved && saved.startsWith('blob:')) {
       localStorage.removeItem('harmonic_last_src');
       localStorage.removeItem('harmonic_last_name');
-      return "https://raw.githubusercontent.com/mdn/webaudio-examples/main/audio-basics/outfoxing.mp3";
+      return "/harmonic-stereo-tuning/back-to-you-jesus.m4a";
     }
-    return saved || "https://raw.githubusercontent.com/mdn/webaudio-examples/main/audio-basics/outfoxing.mp3";
+    return saved || "/harmonic-stereo-tuning/back-to-you-jesus.m4a";
   });
   const [fileName, setFileName] = useState(() => {
-    return localStorage.getItem('harmonic_last_name') || 'Default: Outfoxing (Ambient)';
+    return localStorage.getItem('harmonic_last_name') || 'Default: Back to You Jesus';
   });
   const [isLooping, setIsLooping] = useState(true);
   const [playbackRate, setPlaybackRate] = useState(1.0);
@@ -543,9 +543,9 @@ export default function App() {
 
   const handleAudioError = () => {
     // If the current source failed, fallback to default
-    if (audioSrc !== "https://raw.githubusercontent.com/mdn/webaudio-examples/main/audio-basics/outfoxing.mp3") {
-      setAudioSrc("https://raw.githubusercontent.com/mdn/webaudio-examples/main/audio-basics/outfoxing.mp3");
-      setFileName('Default: Outfoxing (Ambient)');
+    if (audioSrc !== "/harmonic-stereo-tuning/back-to-you-jesus.m4a") {
+      setAudioSrc("/harmonic-stereo-tuning/back-to-you-jesus.m4a");
+      setFileName('Default: Back to You Jesus');
     }
   };
 
