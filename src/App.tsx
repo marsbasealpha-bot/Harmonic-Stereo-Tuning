@@ -595,7 +595,6 @@ export default function App() {
       <canvas ref={starfieldRef} className="fixed inset-0 -z-10 opacity-40" />
       
       <audio 
-        key={audioSrc}
         ref={audioElementRef} 
         crossOrigin="anonymous" 
         src={audioSrc}

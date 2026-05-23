@@ -1,9 +1,11 @@
-const CACHE_NAME = 'harmonic-v2';
+const CACHE_NAME = 'harmonic-v3';
 const ASSETS_TO_CACHE = [
-  './',
-  './index.html',
-  './manifest.json',
-  './icon.svg'
+  '/harmonic-stereo-tuning/',
+  '/harmonic-stereo-tuning/index.html',
+  '/harmonic-stereo-tuning/manifest.json',
+  '/harmonic-stereo-tuning/icon.svg',
+  '/harmonic-stereo-tuning/assets/index-XPplHEAj.js',
+  '/harmonic-stereo-tuning/assets/index-RN-81Os0.css'
 ];
 
 self.addEventListener('install', (event) => {
@@ -48,7 +50,7 @@ self.addEventListener('fetch', (event) => {
         return response;
       }).catch(() => {
         // Fallback for offline
-        return caches.match('./index.html');
+        return caches.match('/harmonic-stereo-tuning/index.html');
       });
     })
   );
