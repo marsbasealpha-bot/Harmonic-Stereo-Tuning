@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Harmonic Stereo Tuning</string>
+    <string name="title_activity_main">Harmonic Stereo Tuning</string>
+    <string name="package_name">com.harmonic.stereotuning</string>
+    <string name="custom_url_scheme">com.harmonic.stereotuning</string>
+</resources>
