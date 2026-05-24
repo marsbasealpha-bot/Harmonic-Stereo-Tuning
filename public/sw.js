@@ -1,4 +1,4 @@
-const CACHE_NAME = 'harmonic-v5';
+const CACHE_NAME = 'harmonic-v6';
 const ASSETS_TO_CACHE = [
   '/harmonic-stereo-tuning/',
   '/harmonic-stereo-tuning/index.html',
@@ -33,6 +33,21 @@ self.addEventListener('fetch', (event) => {
   // Skip cross-origin requests
   if (!event.request.url.startsWith(self.location.origin)) return;
 
+  // Network-first for HTML pages (like index.html) to ensure updates
+  if (event.request.mode === 'navigate' || event.request.headers.get('accept').includes('text/html')) {
+    event.respondWith(
+      fetch(event.request).then((response) => {
+        const responseToCache = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseToCache));
+        return response;
+      }).catch(() => {
+        return caches.match(event.request).then(cached => cached || caches.match('/harmonic-stereo-tuning/index.html'));
+      })
+    );
+    return;
+  }
+
+  // Cache-first for all other assets (JS, CSS, images, audio)
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) return cachedResponse;
